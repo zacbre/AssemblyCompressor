@@ -12,7 +12,7 @@ Instructions:
 3. Now you'll want to load your assembly when it's called, so we'll create the following code to your Program.cs file for decompression:
 
 Code:
-private static byte[] DecompressAssembly(byte[] assembly)
+<code>private static byte[] DecompressAssembly(byte[] assembly)
       {
       Stream stream = new MemoryStream(assembly);
       using (var decompress = new GZipStream(stream, CompressionMode.Decompress, false))
@@ -42,24 +42,24 @@ private static byte[] DecompressAssembly(byte[] assembly)
             return null;
             }
       }
-      }
+      }</code>
 
 4. Now we can add our assembly resolving code. Add the following as the first line under the Main function in Program.cs:
 
 Code:
-AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(pHandleAssemblyResolver);
+<code>AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(pHandleAssemblyResolver);</code>
 
 5. Add the following function to Program.cs:
 
 Code:
-private static System.Reflection.Assembly pHandleAssemblyResolver(object sender, ResolveEventArgs args)
+<code>private static System.Reflection.Assembly pHandleAssemblyResolver(object sender, ResolveEventArgs args)
       {
-      }
+      }</code>
 
 6. Inside of the pHandleAssemblyResolver function, you will have to add the name of your assembly. For instance, let's say my assembly that I want to load is called "MyAssembly.dll" and the default namespace is called MyAssembly. It will then look like this:
 
 Code:
-private static System.Reflection.Assembly pHandleAssemblyResolver(object sender, ResolveEventArgs args)
+<code>private static System.Reflection.Assembly pHandleAssemblyResolver(object sender, ResolveEventArgs args)
       {
              switch(true)
              {
@@ -70,3 +70,4 @@ private static System.Reflection.Assembly pHandleAssemblyResolver(object sender,
             return null;
              }
       }
+</code>
