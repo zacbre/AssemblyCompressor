@@ -11,55 +11,56 @@ Instructions:
 
 3. Now you'll want to load your assembly when it's called, so we'll create the following code to your Program.cs file for decompression:
 
-Code:
-<code>private static byte[] DecompressAssembly(byte[] assembly)
-      {
-      Stream stream = new MemoryStream(assembly);
-      using (var decompress = new GZipStream(stream, CompressionMode.Decompress, false))
-      {
-            try
+````
+public static byte[] DecompressAssembly(byte[] assembly)
+        {
+            Stream stream = new MemoryStream(assembly);
+            using (var decompress = new GZipStream(stream, CompressionMode.Decompress, false))
             {
-            const int size = 1024;
-            byte[] buffer = new byte[size];
-            using (MemoryStream memory = new MemoryStream())
-            {
-            int count = 0;
-            do
-            {
-            count = decompress.Read(buffer, 0, size);
-            if (count > 0)
-            {
-            memory.Write(buffer, 0, count);
+                try
+                {
+                    const int size = 1024;
+                    byte[] buffer = new byte[size];
+                    using (MemoryStream memory = new MemoryStream())
+                    {
+                        int count = 0;
+                        do
+                        {
+                            count = decompress.Read(buffer, 0, size);
+                            if (count > 0)
+                            {
+                                memory.Write(buffer, 0, count);
+                            }
+                        }
+                        while (count > 0);
+                        return memory.ToArray();
+                    }  
+                }
+                catch (Exception Ex)
+                {
+                    MessageBox.Show(Ex.ToString());
+                    return null;
+                }
             }
-            }
-            while (count > 0);
-            return memory.ToArray();
-            }  
-            }
-            catch (Exception Ex)
-            {
-            Console.WriteLine(Ex.ToString());
-            return null;
-            }
-      }
-      }</code>
+        }
+````
 
 4. Now we can add our assembly resolving code. Add the following as the first line under the Main function in Program.cs:
 
-Code:
 <code>AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(pHandleAssemblyResolver);</code>
 
 5. Add the following function to Program.cs:
 
-Code:
-<code>private static System.Reflection.Assembly pHandleAssemblyResolver(object sender, ResolveEventArgs args)
+````
+private static System.Reflection.Assembly pHandleAssemblyResolver(object sender, ResolveEventArgs args)
       {
-      }</code>
+      }
+````
 
 6. Inside of the pHandleAssemblyResolver function, you will have to add the name of your assembly. For instance, let's say my assembly that I want to load is called "MyAssembly.dll" and the default namespace is called MyAssembly. It will then look like this:
 
-Code:
-<code>private static System.Reflection.Assembly pHandleAssemblyResolver(object sender, ResolveEventArgs args)
+````
+private static System.Reflection.Assembly pHandleAssemblyResolver(object sender, ResolveEventArgs args)
       {
              switch(true)
              {
@@ -70,4 +71,4 @@ Code:
             return null;
              }
       }
-</code>
+````
